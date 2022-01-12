@@ -64,9 +64,16 @@ function paintSquare(event) {
 
 document.addEventListener('mouseup', () => shouldPaint = false); //Changes shouldpaint to false when the user is not clicking
 
-function startGame() {
-    dimension = +prompt('How many squares do you want on one side (the other side will have the same amount of squares)?');
-    mainContainer.innerHTML = '';
-    createGrid(dimension, dimension);   
+function showPopup() {
+    document.querySelector('.landing').style.display = 'flex';
+          
 }
-document.querySelector('.reset').addEventListener('click',  startGame);
+document.querySelector('.reset').addEventListener('click',  showPopup);
+
+document.querySelector(".submit-button").addEventListener('click', () => {
+    
+    document.querySelector('.landing').style.display = 'none';
+    dimension = document.querySelector('#amount-of-boxes').value;
+    mainContainer.innerHTML = '';
+    createGrid(dimension, dimension);
+});

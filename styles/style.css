@@ -12,6 +12,7 @@ body{
     align-items: center;
     justify-content: center;
     gap: 1px;
+    font-family: sans-serif;
 }
 main{
     width: 600px;
@@ -55,4 +56,42 @@ button{
 }
 .reset:hover{
     transform: scale(1.1);
+}
+
+.landing{
+    display: block;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: #000000e5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal{
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: white;
+    width: 700px;
+    height: 200px;
+}
+
+h1, p{
+    margin-left: 8rem;
+    margin-bottom: 0.5rem;
+}
+button.submit-button{
+    font-size: 0.8rem;
+    width: max-content;
+    height: max-content;
+    padding: 0.4rem 0.8rem;
+}
+.form{
+    margin-left: 8rem;
+    margin-right: 8rem;
+    display: flex;
+    justify-content: space-between;
 }
