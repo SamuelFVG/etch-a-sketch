@@ -1,67 +1,72 @@
-//let grid = [];
-let shouldPaint = false;
+/*
+    Criar a "landing page"
+    Criar uma funcionalidade para rgb
+    Criar uma funcionalidade para escurecer?
+*/
+
+let shouldPaint = false, paintColor='black';
 const mainContainer = document.querySelector('#main');
+const leftContainer = document.querySelector('#left-buttons');
+const COLORS = ['#ffffff','#000000', '#787878','#ff0000','#ff8000', '#ffff00', '#0ddd00', '#0000ff', '#8000ff', '#ff0081'];
+
+const currentColorBtn = document.querySelector('.current-color');
+currentColorBtn.style.backgroundColor = paintColor;
 
 /*
-    This function creates a grid with an specific number of rows and columns, that is represented by an array of arrays. 
-    Each column item from the grid is stored inside of the array of arrays in its specific position (row and column).
-    The function also creates the basic structure of the page. In the structure, the rows are divs that contain column items, wich are shown on the screen.
-    Every div has a class with its specific index and another class that says if it's a row or a column
+    This function creates a grid with an specific number of rows and columns. 
+    In the grid (maincontainer), the rows are divs that contain column items, wich are the divs that are shown on the screen.    
 */  
 function createGrid(rows, columns){
     for(let i = 0; i < rows; i++){ 
-        //grid.push([]);  // push a 'row' array inside main array 
-        
         const row = document.createElement('div'); 
-        row.setAttribute('ondragstart', 'return false;');
-        row.setAttribute('class', `row`);
-        
+        row.setAttribute('ondragstart', 'return false;'); //prevents the dragging bug
+        row.setAttribute('class', 'row');
         mainContainer.appendChild(row);
 
         for(let j = 0; j < columns; j++){
-            const column_item = document.createElement('div');
-            
-            column_item.addEventListener('mouseover', colorSquare);
-            column_item.addEventListener('mousedown', e => {
-                shouldPaint = true;
-                colorSquare(e);
+            const columnItem = document.createElement('div');
+
+            columnItem.addEventListener('mouseover', paintSquare); //adds two event listeners: one for hovering and another for clicking. Can't do both in only one event listener unfortunately
+            columnItem.addEventListener('mousedown', e => {
+                shouldPaint = true; //is here so that only hovering doesn't paint the squares
+                paintSquare(e);
             });
-            column_item.setAttribute('ondragstart', 'return false;');
-            //grid[i].push(column_item); // push each column item inside of the specific row of index i in the array of arrays
-            column_item.setAttribute('class', `column-item`);
-            row.appendChild(column_item);
+
+            columnItem.setAttribute('ondragstart', 'return false;'); //prevents the dragging bug
+            columnItem.setAttribute('class', `column-item`);
+            row.appendChild(columnItem);
         }
     }
-
-    /*Add event listeners for all the squares
-    grid.forEach(row => { 
-        row.forEach(item => { 
-            item.addEventListener('mouseover', colorSquare);
-            item.addEventListener('mousedown', e => {
-                shouldPaint = true;
-                colorSquare(e);
-            });
-        }); 
-    });*/
 }
+//criar quadrado de cor atual
+/*
+    In this part of the code, i create a button for every color inside of the COLORS array.
+    Then, I set the bg color of the button as the current color in loop of the array
+    Then, i create an event listener that changes the color of the "printer" when the button created is clicked
+*/
+COLORS.forEach(color => {
+    const btn = document.createElement('button');
+    btn.classList.add('color-button');
+    btn.style.cssText = `background-color: ${color}`;
+    btn.addEventListener('click', event => {
+        paintColor = event.target.style.backgroundColor
+        currentColorBtn.style.backgroundColor = paintColor;
+        currentColorBtn.style.boxShadow =`0 0 5px ${paintColor}`;
 
-function colorSquare(event) {   
+    });
+    leftContainer.appendChild(btn);
+});
+function paintSquare(event) {   
     if (shouldPaint) {
-        event.target.style.backgroundColor = 'black'; //paints only when the mouse is over an item and the mouse is clicking.
+        event.target.style.backgroundColor = `${paintColor}`; //paints only when the mouse is over an item and the mouse is clicking.
     }
 }
-/*
-    I need to create a function here because IF the user wants to erase everything and create a new grid, the event listeners
-    will be erased with main container. This part of the code would only run once without the function, so new event listeners
-    would not be created, which isn't what i want.
-*/
 
 document.addEventListener('mouseup', () => shouldPaint = false); //Changes shouldpaint to false when the user is not clicking
 
 function startGame() {
-    dimension = +prompt('number');
+    dimension = +prompt('How many squares do you want on one side (the other side will have the same amount of squares)?');
     mainContainer.innerHTML = '';
-    //grid.length = 0;
     createGrid(dimension, dimension);   
 }
 document.querySelector('.reset').addEventListener('click',  startGame);
