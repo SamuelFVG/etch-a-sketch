@@ -48,7 +48,6 @@ COLORS.forEach(color => {
         shouldBeRandomColor = false;
         shoudlBeGrayscale = false;
         paintColor = event.target.style.backgroundColor
-        currentColorBtn.style.cssText = `background-color: ${paintColor}; box-shadow: 0 0 5px ${paintColor}`;
     });
     leftContainer.appendChild(btn);
 });
@@ -105,6 +104,8 @@ function paintSquare(event) {
         else{
             event.target.style.backgroundColor = `${paintColor}`; //paints only when the mouse is over an item and the mouse is clicking.
         }
+        currentColorBtn.style.cssText = `background-color: ${paintColor}; box-shadow: 0 0 5px ${paintColor}`;
+
     }
 }
 
