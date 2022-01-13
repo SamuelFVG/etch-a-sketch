@@ -36,23 +36,37 @@ main{
     flex-direction: column;
     gap: 1px;
 }
-button.left-btn{
+button.left-btn, button.right-btn{
     width: 3.125rem;
     height: 3.125rem;
     border-radius: 10%;
     border-color: #555555;
 }
-
-
-button.other-buttons {
-    border-radius: 50%;
-    background-color: white;
+button.rand-button{
+    background: linear-gradient(#ff0000, #ff8000, #ffff00, #0ddd00, #0000ff, #8000ff, #ff0081);
+    font-weight: bolder;
+}   
+button.grayscale-button{
+    background: linear-gradient(black, white);
+    font-weight: bolder;
 }
-
 .current-color{
     opacity: 0.8;
     border: none;
     transform: scale(0.8);
+}
+
+
+#other-buttons{
+    height: 37.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 10px;
+}
+button.other-buttons {
+    border-radius: 50%;
+    background-color: white;
 }
 .reset:hover{
     transform: scale(1.1);

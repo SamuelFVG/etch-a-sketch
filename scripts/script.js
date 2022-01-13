@@ -2,7 +2,7 @@ let shouldPaint = false, paintColor='black', landingIsFlex = true;
 const mainContainer = document.querySelector('#main');
 const leftContainer = document.querySelector('#left-buttons');
 const modalInstructions = document.querySelector('.instructions-in-modal');
-const COLORS = ['#ffffff','#000000', '#787878','#ff0000','#ff8000', '#ffff00', '#0ddd00', '#0000ff', '#8000ff', '#ff0081'];
+const COLORS = ['#ffffff','#000000', '#787778','#ff0000','#ff8000', '#ffff00', '#0ddd00', '#0000ff', '#8000ff', '#ff0081'];
 
 const currentColorBtn = document.querySelector('.current-color');
 currentColorBtn.style.backgroundColor = paintColor;
@@ -45,15 +45,66 @@ COLORS.forEach(color => {
     btn.classList.add('color-button', 'left-btn');
     btn.style.cssText = `background-color: ${color}`;
     btn.addEventListener('click', event => {
+        shouldBeRandomColor = false;
+        shoudlBeGrayscale = false;
         paintColor = event.target.style.backgroundColor
         currentColorBtn.style.cssText = `background-color: ${paintColor}; box-shadow: 0 0 5px ${paintColor}`;
     });
     leftContainer.appendChild(btn);
 });
 
+const randomColorBtn = document.querySelector('.rand-button');
+let shouldBeRandomColor;
+randomColorBtn.addEventListener('click', () => {
+    shouldBeRandomColor = true
+    shoudlBeGrayscale = false;
+});
+
+const greyscaleBtn = document.querySelector('.grayscale-button');
+let shoudlBeGrayscale;
+greyscaleBtn.addEventListener('click', () => {
+    shoudlBeGrayscale = true
+    shouldBeRandomColor = false;
+});
+
 function paintSquare(event) {   
     if (shouldPaint) {
-        event.target.style.backgroundColor = `${paintColor}`; //paints only when the mouse is over an item and the mouse is clicking.
+        if (shouldBeRandomColor){
+            paintColor = COLORS[3+Math.floor(Math.random()*(COLORS.length-3))];
+            event.target.style.backgroundColor = `${paintColor}`; 
+
+
+        }
+        else if (shoudlBeGrayscale){
+            let color = event.target.style.backgroundColor;
+
+            color = color.substring(4, color.length - 1);
+
+            let colorArr = color.split(', ');
+            colorArr = colorArr.map(item => {
+                return Number(item);
+            });
+            
+            if (colorArr[0] != colorArr[1] || colorArr[0] != colorArr[2] || colorArr[1] != colorArr[2]){
+                colorArr = [255, 255, 255];
+            }
+
+            const auxColorArray = [0, 0, 0];
+            for (let i = 0; i < 3; i++){
+                if (colorArr[i] - 40 < 0){
+                    auxColorArray[i] = 0;
+                } else{
+                    auxColorArray[i] = colorArr[i] - 40;
+                }
+            }
+
+            paintColor = `rgb(${auxColorArray[0]}, ${auxColorArray[1]}, ${auxColorArray[2]})`;
+            console.log(paintColor)
+            event.target.style.backgroundColor = paintColor; 
+        }
+        else{
+            event.target.style.backgroundColor = `${paintColor}`; //paints only when the mouse is over an item and the mouse is clicking.
+        }
     }
 }
 
@@ -67,13 +118,13 @@ document.querySelector('.reset').addEventListener('click',  () => {
 
 let willSubmit = false;
 document.querySelector(".submit-button").addEventListener('click', ()=>{
-    startGridCreation();
     willSubmit = true;
+    startGridCreation();
 });
 document.addEventListener('keydown', (e) => {
     if (e.key == 'Enter' && landingIsFlex){
-        startGridCreation();
         willSubmit = true;
+        startGridCreation();
     }
 });
 
@@ -81,7 +132,6 @@ function startGridCreation() {
     dimension = document.querySelector('#amount-of-boxes').value;
     
     if ((dimension <= 1 || dimension >= 100 || isNaN(dimension)) && willSubmit){
-        alert('Invalid input');
         modalInstructions.textContent = 'Ivalid input! The new width should be smaller than 100 and greater than 1.';
         modalInstructions.style.color = 'red'; 
         willSubmit = false;
