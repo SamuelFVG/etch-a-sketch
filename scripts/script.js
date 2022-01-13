@@ -1,12 +1,7 @@
-/*
-    Criar a "landing page"
-    Criar uma funcionalidade para rgb
-    Criar uma funcionalidade para escurecer?
-*/
-
-let shouldPaint = false, paintColor='black';
+let shouldPaint = false, paintColor='black', landingIsFlex = true;
 const mainContainer = document.querySelector('#main');
 const leftContainer = document.querySelector('#left-buttons');
+const modalInstructions = document.querySelector('.instructions-in-modal');
 const COLORS = ['#ffffff','#000000', '#787878','#ff0000','#ff8000', '#ffff00', '#0ddd00', '#0000ff', '#8000ff', '#ff0081'];
 
 const currentColorBtn = document.querySelector('.current-color');
@@ -28,7 +23,7 @@ function createGrid(rows, columns){
 
             columnItem.addEventListener('mouseover', paintSquare); //adds two event listeners: one for hovering and another for clicking. Can't do both in only one event listener unfortunately
             columnItem.addEventListener('mousedown', e => {
-                shouldPaint = true; //is here so that only hovering doesn't paint the squares
+                shouldPaint = true; //is here so that the hovering, by itself, doesn't paint the squares
                 paintSquare(e);
             });
 
@@ -38,42 +33,66 @@ function createGrid(rows, columns){
         }
     }
 }
-//criar quadrado de cor atual
 /*
     In this part of the code, i create a button for every color inside of the COLORS array.
     Then, I set the bg color of the button as the current color in loop of the array
     Then, i create an event listener that changes the color of the "printer" when the button created is clicked
 */
+document.addEventListener('mouseup', () => shouldPaint = false); //Changes shouldpaint to false when the user is not clicking
+
 COLORS.forEach(color => {
     const btn = document.createElement('button');
-    btn.classList.add('color-button');
+    btn.classList.add('color-button', 'left-btn');
     btn.style.cssText = `background-color: ${color}`;
     btn.addEventListener('click', event => {
         paintColor = event.target.style.backgroundColor
-        currentColorBtn.style.backgroundColor = paintColor;
-        currentColorBtn.style.boxShadow =`0 0 5px ${paintColor}`;
-
+        currentColorBtn.style.cssText = `background-color: ${paintColor}; box-shadow: 0 0 5px ${paintColor}`;
     });
     leftContainer.appendChild(btn);
 });
+
 function paintSquare(event) {   
     if (shouldPaint) {
         event.target.style.backgroundColor = `${paintColor}`; //paints only when the mouse is over an item and the mouse is clicking.
     }
 }
 
-document.addEventListener('mouseup', () => shouldPaint = false); //Changes shouldpaint to false when the user is not clicking
-
-function showPopup() {
+//When the reset button is clicked, make the landing popup visible by making it go from 'display: none' to 'display: flex'
+document.querySelector('.reset').addEventListener('click',  () => {
     document.querySelector('.landing').style.display = 'flex';
-          
-}
-document.querySelector('.reset').addEventListener('click',  showPopup);
-
-document.querySelector(".submit-button").addEventListener('click', () => {
-    
-    document.querySelector('.landing').style.display = 'none';
-    dimension = document.querySelector('#amount-of-boxes').value;
-    mainContainer.innerHTML = '';
-    createGrid(dimension, dimension);
+    landingIsFlex = true;
 });
+
+
+
+let willSubmit = false;
+document.querySelector(".submit-button").addEventListener('click', ()=>{
+    startGridCreation();
+    willSubmit = true;
+});
+document.addEventListener('keydown', (e) => {
+    if (e.key == 'Enter' && landingIsFlex){
+        startGridCreation();
+        willSubmit = true;
+    }
+});
+
+function startGridCreation() {
+    dimension = document.querySelector('#amount-of-boxes').value;
+    
+    if ((dimension <= 1 || dimension >= 100 || isNaN(dimension)) && willSubmit){
+        alert('Invalid input');
+        modalInstructions.textContent = 'Ivalid input! The new width should be smaller than 100 and greater than 1.';
+        modalInstructions.style.color = 'red'; 
+        willSubmit = false;
+    }
+    else if(willSubmit){
+        document.querySelector('.landing').style.display = 'none';
+        mainContainer.innerHTML = '';
+        willSubmit = false;
+        modalInstructions.textContent = 'Write the new width. It should be smaller than 100 and greater than 1.';
+        modalInstructions.style.color = 'black';
+        createGrid(dimension, dimension);
+    }
+
+}

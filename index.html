@@ -2,28 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Etch a Sketch</title>
+    <title>Samuel's Sketchpad</title>
     <script src="scripts/script.js" defer></script>
     <link rel="stylesheet" href="styles/style.css">
 </head>
 
 <body>
     <nav id="left-buttons">
-        <button class="other-buttons reset">Reset</button>
-        <button class="other-buttons current-color"></button>
+        <button class="left-btn other-buttons reset">Reset</button>
+        <button class="left-btn other-buttons current-color"></button>
     </nav>
 
     <main id="main" ondragstart="return false;"></main>
 
-    <section class="landing">
+    <div class="landing">
         <article class="modal">
-            <h1>Samuel's Sketchpad</h1>
-            <p>Write the amount of squares you want on ONE side</p>
-            <article class="form">   
-                <input type="text" id="amount-of-boxes" placeholder="Write only one number">
-                <button type="submit" class="submit-button">Start!</button>
-            </article>
+            <div class="modal-content-container">
+                <h1>Samuel's Sketchpad</h1>
+                <p class="instructions-in-modal">Write the new width. It should be smaller than 100 and greater than 1.</p>
+                <div class="form">   
+                    <input type="text" id="amount-of-boxes" placeholder="Write only one number">
+                    <button type="submit" class="submit-button">Start!</button>
+                </div>
+            </div>
         </article>
-    </section>
+    </div>
 </body>
 </html>
